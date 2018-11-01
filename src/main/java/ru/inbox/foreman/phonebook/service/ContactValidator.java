@@ -10,12 +10,9 @@ import java.util.regex.Pattern;
 
 @Service
 public class ContactValidator {
-    private final ContactService contactService;
-
     @Autowired
-    public ContactValidator(ContactService contactService) {
-        this.contactService = contactService;
-    }
+    private ContactService contactService;
+
 
     public ValidationContact validationContact(Contact contact) {
         ValidationContact validationContact = new ValidationContact();
@@ -27,25 +24,24 @@ public class ContactValidator {
         }
         if (contact.getLastName().length() < 2) {
             validationContact.setValidate(false);
-            validationContact.setNameError("не корректная фамилия");
+            validationContact.setLastNameError("не корректная фамилия");
         }
         if (!checkPhone(contact)) {
             validationContact.setValidate(false);
-            validationContact.setNameError("номер задан не корректно");
+            validationContact.setPhoneError("номер задан не корректно");
         }
-        if (contactService.findPhone(contact.getPhone())) {
+
+        if (!contactService.findContactByPhone(contact.getPhone()).isEmpty()) {
             validationContact.setValidate(false);
-            validationContact.setNameError("не корректное имя");
+            validationContact.setPhoneError("номер существует");
         }
-
-
         return validationContact;
     }
 
-    //TODO сделать тест
+
     private boolean checkPhone(Contact contact) {
         String phone = contact.getPhone();
-        Pattern p = Pattern.compile("^+7[\\d]{9}$");
+        Pattern p = Pattern.compile("^[+][0-9]{1,2}[\\d]{10}$");
         Matcher m = p.matcher(phone);
         return m.matches();
     }

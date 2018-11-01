@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.inbox.foreman.phonebook.model.Contact;
+import ru.inbox.foreman.phonebook.model.ValidationContact;
 import ru.inbox.foreman.phonebook.service.ContactService;
 
 import java.util.List;
@@ -11,10 +12,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/phoneBook/rcp/api/v1")
 public class myController {
-    private final
-    ContactService contactService;
-
     @Autowired
+    private ContactService contactService;
+
+
     public myController(ContactService contactService) {
         this.contactService = contactService;
     }
@@ -23,5 +24,11 @@ public class myController {
     @ResponseBody
     public List<Contact> getAllContact() {
         return contactService.gelAllContacts();
+    }
+
+    @RequestMapping(value = "addContacts", method = RequestMethod.POST)
+    @ResponseBody
+    public ValidationContact addContact(@RequestBody Contact contact) {
+        return contactService.addContact(contact);
     }
 }

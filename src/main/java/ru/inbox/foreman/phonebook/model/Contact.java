@@ -1,13 +1,17 @@
 package ru.inbox.foreman.phonebook.model;
 
-import com.sun.org.apache.xalan.internal.xsltc.dom.SimpleResultTreeImpl;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class Contact {
+
     private int id;
+
     private String name;
+
     private String lastName;
+
     private String phone;
 
     public String getPhone() {
